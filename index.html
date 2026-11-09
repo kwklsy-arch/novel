@@ -173,12 +173,14 @@
             <div class="flex items-center space-x-2 overflow-x-auto pt-4 border-t border-slate-100 dark:border-zinc-700/50 mt-4 no-scrollbar">
                 <span class="text-xs font-semibold text-slate-400 dark:text-zinc-500 whitespace-nowrap mr-1">題材:</span>
                 <button onclick="setGenreFilter('ALL')" class="genre-pill px-3 py-1 text-xs rounded-full border border-amber-800 bg-amber-800 text-white font-medium transition whitespace-nowrap" data-genre="ALL">全部</button>
-                <button onclick="setGenreFilter('玄幻修仙')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="玄幻修仙">玄幻修仙</button>
-                <button onclick="setGenreFilter('都市腦洞')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="都市腦洞">都市腦洞</button>
-                <button onclick="setGenreFilter('懸疑怪談')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="懸疑怪談">懸疑怪談</button>
-                <button onclick="setGenreFilter('輕鬆沙雕')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="輕鬆沙雕">輕鬆沙雕</button>
+                <button onclick="setGenreFilter('青春甜寵')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="青春甜寵">青春甜寵</button>
+                <button onclick="setGenreFilter('重生復仇')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="重生復仇">重生復仇</button>
+                <button onclick="setGenreFilter('校園生活')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="校園生活">校園生活</button>
+                <button onclick="setGenreFilter('宮斗權臣')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="宮斗權臣">宮斗權臣</button>
                 <button onclick="setGenreFilter('科幻末世')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="科幻末世">科幻末世</button>
-                <button onclick="setGenreFilter('其他')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="其他">其他</button>
+                <button onclick="setGenreFilter('風水玄學')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="風水玄學">風水玄學</button>
+                <button onclick="setGenreFilter('相互救贖')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="相互救贖">相互救贖</button>
+                <button onclick="setGenreFilter('醫學治療')" class="genre-pill px-3 py-1 text-xs rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 hover:border-amber-800 transition whitespace-nowrap" data-genre="醫學治療">醫學治療</button>
             </div>
         </section>
 
@@ -219,15 +221,34 @@
             <form id="novelForm" onsubmit="saveNovel(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
                 <input type="hidden" id="novelId">
 
+                <!-- AI Auto-Fill Section -->
+                <div class="bg-amber-50 dark:bg-amber-950/40 p-3.5 rounded-xl border border-amber-200 dark:border-amber-900/50 mb-2">
+                    <label class="block text-xs font-bold text-amber-900 dark:text-amber-400 mb-1 flex items-center justify-between">
+                        <span><i class="fa-solid fa-wand-magic-sparkles text-amber-500 mr-1"></i> AI 自動抓取 / 補全資料 (番茄/網文)</span>
+                        <span class="font-normal text-amber-700/70 dark:text-amber-400/70 text-[11px]">輸入書名自動產生簡介與資訊</span>
+                    </label>
+                    <div class="flex gap-2">
+                        <input type="text" id="aiSearchTitle" placeholder="請輸入番茄小說或網文書名..." class="flex-1 px-3 py-1.5 bg-white dark:bg-zinc-900 border border-amber-300 dark:border-amber-800 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
+                        <button type="button" id="aiFetchBtn" onclick="autoFillNovelWithAI()" class="px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg text-xs transition flex items-center space-x-1 shrink-0">
+                            <i class="fa-solid fa-sparkles"></i>
+                            <span id="aiFetchBtnText">自動填寫</span>
+                        </button>
+                    </div>
+                    <div id="aiFetchStatus" class="hidden text-xs text-amber-800 dark:text-amber-300 mt-2 flex items-center space-x-2">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>AI 正在聯網檢索番茄小說資料中，請稍候...</span>
+                    </div>
+                </div>
+
                 <!-- Title & Author -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">書名 *</label>
-                        <input type="text" id="formTitle" required placeholder="例如：我師兄實在太穩健了" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
+                        <input type="text" id="formTitle" required placeholder="例如：難哄" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">作者</label>
-                        <input type="text" id="formAuthor" placeholder="例如：言歸正傳" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
+                        <input type="text" id="formAuthor" placeholder="例如：竹已" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
                     </div>
                 </div>
 
@@ -236,17 +257,19 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">題材分類</label>
                         <select id="formGenre" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
-                            <option value="玄幻修仙">玄幻修仙</option>
-                            <option value="都市腦洞">都市腦洞</option>
-                            <option value="懸疑怪談">懸疑怪談</option>
-                            <option value="輕鬆沙雕">輕鬆沙雕</option>
+                            <option value="青春甜寵">青春甜寵</option>
+                            <option value="重生復仇">重生復仇</option>
+                            <option value="校園生活">校園生活</option>
+                            <option value="宮斗權臣">宮斗權臣</option>
                             <option value="科幻末世">科幻末世</option>
-                            <option value="其他">其他</option>
+                            <option value="風水玄學">風水玄學</option>
+                            <option value="相互救贖">相互救贖</option>
+                            <option value="醫學治療">醫學治療</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">主角姓名</label>
-                        <input type="text" id="formProtagonist" placeholder="例如：李長壽" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
+                        <input type="text" id="formProtagonist" placeholder="例如：桑延、溫以凡" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">閱讀狀態</label>
@@ -263,7 +286,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">閱讀進度</label>
-                        <input type="text" id="formProgress" placeholder="例如：第 450 章 (金丹期大比)" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
+                        <input type="text" id="formProgress" placeholder="例如：第 80 章 (大結局)" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">個人評分 (1-5 星)</label>
@@ -281,19 +304,19 @@
                         <span>💡 一句話防忘記憶點 (最重要)</span>
                         <span class="font-normal text-slate-400 text-[11px]">讓你一眼想起這本書講啥</span>
                     </label>
-                    <input type="text" id="formSummary" required placeholder="主角攜苟道系統穿越封神前夕，瘋狂藏牌算計天道..." class="w-full px-3 py-2 bg-amber-50/50 dark:bg-zinc-900 border border-amber-200 dark:border-amber-900/40 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
+                    <input type="text" id="formSummary" required placeholder="女主因夢遊症機緣巧合與高中暗戀對象合租..." class="w-full px-3 py-2 bg-amber-50/50 dark:bg-zinc-900 border border-amber-200 dark:border-amber-900/40 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none">
                 </div>
 
                 <!-- Highlight Plot Nodes -->
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">關鍵劇情備忘 / 大事件歷史</label>
-                    <textarea id="formPlotMemory" rows="3" placeholder="用逗號或分行記錄關鍵點：&#10;- 200章：斬殺天道使者小號&#10;- 350章：主角暴露渡劫期真實修為" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none"></textarea>
+                    <textarea id="formPlotMemory" rows="3" placeholder="用逗號或分行記錄關鍵點：&#10;- 高中誤會解開&#10;- 女主克服心理障礙與男主相認" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none"></textarea>
                 </div>
 
                 <!-- Pros / Cons / Warnings -->
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">讀後感 / 避雷提醒 (毒點/爽點)</label>
-                    <textarea id="formNotes" rows="2" placeholder="優點：反套路智商在線；雷點：中後段智鬥描寫有點太繁瑣。" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none"></textarea>
+                    <textarea id="formNotes" rows="2" placeholder="優點：男主深情專一，互動超甜。" class="w-full px-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-800 focus:outline-none"></textarea>
                 </div>
 
                 <!-- Modal Actions -->
@@ -377,44 +400,44 @@
         const SAMPLE_NOVELS = [
             {
                 id: "sample-1",
-                title: "我師兄實在太穩健了",
-                author: "言歸正傳",
-                genre: "玄幻修仙",
-                protagonist: "李長壽",
+                title: "難哄",
+                author: "竹已",
+                genre: "青春甜寵",
+                protagonist: "桑延、溫以凡",
                 status: "已完結",
-                rating: 4.5,
-                progress: "全書完結 (第 752 章)",
-                summary: "主角攜苟道思維穿越封神前夕，極度穩健防患未然，紙道人身外化身算計漫天神佛。",
-                plotMemory: "1. 早期造紙道人身外化身代替本體出門冒險。\n2. 陸壓道人被主角瘋狂套路。\n3. 大結局戰天道紫霄宮揭露底牌。",
-                notes: "爽點：智商在線，老六反套路爽文典範。\n避雷：中後段封神大劫線有些略微繁瑣，但總體非常順暢。",
+                rating: 4.8,
+                progress: "全書完結 (第 84 章)",
+                summary: "機緣巧合下女主與高中暗戀的對象桑延合租，開啟一段溫馨治癒的同居生活。",
+                plotMemory: "1. 高中時期的誤會與錯過。\n2. 發現女主患有夢遊症並溫柔維護。\n3. 求婚與甜蜜番外。",
+                notes: "爽點：男主深情專一，對女主呵護備至。\n避雷：無大毒點，偏溫馨甜寵日常。",
                 updatedAt: new Date(Date.now() - 86400000 * 2).toISOString()
             },
             {
                 id: "sample-2",
-                title: "神秘復甦",
-                author: "佛前獻花",
-                genre: "懸疑怪談",
-                protagonist: "楊間",
+                title: "重生後我成了權臣的掌中寶",
+                author: "墨香",
+                genre: "重生復仇",
+                protagonist: "沈妙、謝景行",
                 status: "追更中",
-                rating: 5.0,
-                progress: "第 1280 章 (大昌市鬼眼大昌)",
-                summary: "五濁惡世鬼神復甦，人不能殺鬼，只有鬼能對付鬼，主角駕馭鬼眼在末世掙扎求生。",
-                plotMemory: "1. 敲門鬼事件（開局黃崗村大巴車）。\n2. 餓死鬼事件（大昌市封城，主角駕馭第二隻鬼）。\n3. 鬼郵局與鬼公交路線秘辛。",
-                notes: "絕佳的恐怖懸疑氛圍，壓迫感極強。主角果斷冷酷不聖母。",
+                rating: 4.5,
+                progress: "第 120 章",
+                summary: "前世慘死慘絕人寰，重生回十四歲，看清仇人面目並攜手權臣一路逆襲復仇。",
+                plotMemory: "1. 開局撕破偽善親戚假面具。\n2. 與男主在京城密謀算計仇家。\n3. 拯救家族危局。",
+                notes: "復仇打臉情節非常流暢爽快。",
                 updatedAt: new Date(Date.now() - 3600000 * 5).toISOString()
             },
             {
                 id: "sample-3",
-                title: "神豪：開局返利一個億",
-                author: "風起雲湧",
-                genre: "都市腦洞",
-                protagonist: "陸峰",
+                title: "末日樂園",
+                author: "須尾俱全",
+                genre: "科幻末世",
+                protagonist: "林三酒",
                 status: "養肥中",
-                rating: 4.0,
-                progress: "第 150 章 (剛買下超跑俱樂部)",
-                summary: "主角綁定神豪無限消費返利系統，為女性花錢獲取雙倍返利，一路收購豪車地產。",
-                plotMemory: "1. 開局在主播直播間打賞 500 萬驚呆全網。\n2. 全款買下江景豪宅打臉前女友。",
-                notes: "典型無腦輕鬆爽文，適合下飯或工作累了放鬆閱讀，不用過度考究邏輯。",
+                rating: 4.9,
+                progress: "第 500 章",
+                summary: "極熱地獄、神魔世界等不同末日世界輪番切換，主角憑藉智慧與特殊能力掙扎求生。",
+                plotMemory: "1. 開局極熱世界爆發，變異男友叛變。\n2. 副本世界戰鬥與進化。",
+                notes: "設定極其龐大，腦洞大開，邏輯嚴密。",
                 updatedAt: new Date(Date.now() - 86400000 * 10).toISOString()
             }
         ];
@@ -650,7 +673,7 @@
                     document.getElementById('novelId').value = target.id;
                     document.getElementById('formTitle').value = target.title || '';
                     document.getElementById('formAuthor').value = target.author || '';
-                    document.getElementById('formGenre').value = target.genre || '玄幻修仙';
+                    document.getElementById('formGenre').value = target.genre || '青春甜寵';
                     document.getElementById('formProtagonist').value = target.protagonist || '';
                     document.getElementById('formStatus').value = target.status || '追更中';
                     document.getElementById('formProgress').value = target.progress || '';
@@ -795,6 +818,114 @@
             return str.replace(/[&<>'"]/g, 
                 tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
+        }
+
+        // Gemini AI Auto-Fill Functionality
+        async function autoFillNovelWithAI() {
+            const inputTitle = document.getElementById('aiSearchTitle').value.trim() || document.getElementById('formTitle').value.trim();
+            if (!inputTitle) {
+                alert('請先輸入番茄小說或網文的書名！');
+                return;
+            }
+
+            const fetchBtn = document.getElementById('aiFetchBtn');
+            const btnText = document.getElementById('aiFetchBtnText');
+            const statusDiv = document.getElementById('aiFetchStatus');
+
+            // UI Loading State
+            fetchBtn.disabled = true;
+            btnText.innerText = '抓取中...';
+            statusDiv.classList.remove('hidden');
+
+            const systemPrompt = `你是一個專業的網絡小說與番茄小說資料庫助理。請針對使用者提供的網文/番茄小說書名，檢索或推斷小說資料，並根據規定的 JSON 格式輸出。
+
+題材分類只允許從以下8個選項中選擇最符合的一個：
+- 青春甜寵
+- 重生復仇
+- 校園生活
+- 宮斗權臣
+- 科幻末世
+- 風水玄學
+- 相互救贖
+- 醫學治療
+
+若無法精確對應，請選擇最接近的一個。`;
+
+            const userPrompt = `請查詢並提供網文《${inputTitle}》的詳細資料。`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            "title": { "type": "STRING", "description": "完整正確的小說書名" },
+                            "author": { "type": "STRING", "description": "作者姓名" },
+                            "genre": { 
+                                "type": "STRING", 
+                                "enum": ["青春甜寵", "重生復仇", "校園生活", "宮斗權臣", "科幻末世", "風水玄學", "相互救贖", "醫學治療"]
+                            },
+                            "protagonist": { "type": "STRING", "description": "主要主角姓名，用逗號分隔" },
+                            "summary": { "type": "STRING", "description": "一句話核心防忘記憶點（約30-60字）" },
+                            "plotMemory": { "type": "STRING", "description": "3-5個關鍵劇情節點或大事件歷史，可用分行號列出" },
+                            "notes": { "type": "STRING", "description": "優缺點評析與爽點避雷提醒" },
+                            "rating": { "type": "NUMBER", "description": "推薦評分 (1.0 - 5.0)" }
+                        },
+                        required: ["title", "author", "genre", "protagonist", "summary", "plotMemory", "notes", "rating"]
+                    }
+                }
+            };
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const novelData = JSON.parse(candidate.content.parts[0].text);
+
+                    // Fill into form
+                    document.getElementById('formTitle').value = novelData.title || inputTitle;
+                    document.getElementById('formAuthor').value = novelData.author || '';
+                    if (novelData.genre) {
+                        document.getElementById('formGenre').value = novelData.genre;
+                    }
+                    document.getElementById('formProtagonist').value = novelData.protagonist || '';
+                    document.getElementById('formSummary').value = novelData.summary || '';
+                    document.getElementById('formPlotMemory').value = novelData.plotMemory || '';
+                    document.getElementById('formNotes').value = novelData.notes || '';
+                    if (novelData.rating) {
+                        const ratingVal = Math.min(5, Math.max(1, parseFloat(novelData.rating)));
+                        document.getElementById('formRating').value = ratingVal;
+                        document.getElementById('ratingDisplay').innerText = ratingVal;
+                    }
+                } else {
+                    alert('未搜尋到相關小說資料，請確認書名是否正確。');
+                }
+            } catch (err) {
+                console.error('AI 自動抓取失敗:', err);
+                alert('AI 獲取小說資料失敗，請重新嘗試或手動填寫。');
+            } finally {
+                fetchBtn.disabled = false;
+                btnText.innerText = '自動填寫';
+                statusDiv.classList.add('hidden');
+            }
         }
 
         function formatDate(dateStr) {
