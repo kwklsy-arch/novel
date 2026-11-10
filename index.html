@@ -63,7 +63,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-book-bookmark text-2xl text-amber-400"></i>
-                <h1 class="text-xl font-bold tracking-wide">網文閱歷 <span class="text-xs font-normal opacity-75 bg-amber-800/80 px-2 py-0.5 rounded-full ml-1">小說備忘與追更</span></h1>
+                <h1 class="text-xl font-bold tracking-wide">小說庫 <span class="text-xs font-normal opacity-75 bg-amber-800/80 px-2 py-0.5 rounded-full ml-1">閱讀小記錄</span></h1>
             </div>
             
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -717,51 +717,67 @@
                 return;
             }
 
-            // 1. 將整段文字先進行簡轉繁處理
-            rawText = simpToTrad(rawText);
+            // 1. 簡繁轉換對應表（確保產出繁體中文，包含「气 -> 氣」）
+            const simpMap = {'气':'氣', '体':'體', '书':'書', '作':'作', '者':'者', '甜':'甜', '宠':'寵', '爱':'愛', '阮':'阮', '昭':'昭', '颜':'顏', '诱':'誘', '缠':'纏', '独':'獨', '现':'現', '实':'實', '后':'後', '觉':'覺', '与':'與', '关':'關', '脑':'腦', '恋':'戀', '总':'總', '动':'動', '灵':'靈'};
+            let cleanText = rawText.split('').map(char => simpMap[char] || char).join('');
 
-            // 過濾 App 截圖常見的介面雜訊行
-            const lines = rawText.split('\n').map(l => l.trim()).filter(l => {
+            // 2. 切割成乾淨的行（過濾掉時間、評分、書架等明顯雜訊）
+            let lines = cleanText.split('\n').map(l => l.trim()).filter(l => {
                 if (!l) return false;
-                if (/^\d{1,2}:\d{2}$/.test(l)) return false; 
-                if (l.includes('評分') || l.includes('分') || l.includes('書架') || l.includes('連載') || 
-                    l.includes('萬字') || l.includes('目錄') || l.includes('聽書') || l.includes('免費閱讀') || 
-                    l.includes('萬') || l.includes('人') || l.includes('暫無') || l.includes('詳情') || l.includes('正在閱讀')) {
+                if (/^\d{1,2}:\d{2}$/.test(l)) return false; // 時間
+                if (l.includes('評分') || l.includes('分人數') || l === '•書架' || l.includes('連載中') || 
+                    l.includes('萬字') || l === '目錄' || l === '聽書' || l.includes('免費閱讀') || 
+                    l.includes('人正在閱讀') || l.includes('暫無') || l.includes('详情') || l === '目' || l === '6ว') {
                     return false;
                 }
                 return true;
             });
 
-            // 2. 自動抓取書名
-            if (lines.length > 0) {
-                let titleCandidate = lines.find(l => l.length > 1 && !l.includes('・')) || lines[0];
-                document.getElementById('formTitle').value = titleCandidate.replace(/《|》/g, '').trim();
+            // 3. 智慧抓取「書名」：通常是比較長且包含逗號或完整書名的行（例如：催眠財閥太子後...）
+            let title = '';
+            // 優先找包含「後」、「，」或是長度適中的行作為書名
+            let potentialTitle = lines.find(l => l.length > 3 && (l.includes('後') || l.includes('，') || l.includes('之')));
+            if (potentialTitle) {
+                title = potentialTitle;
+            } else if (lines.length > 0) {
+                title = lines[0]; // 預設用第一行
             }
+            document.getElementById('formTitle').value = title.replace(/《|》/g, '').trim();
 
-            // 3. 自動抓取作者
-            const authorMatch = rawText.match(/(?:作者|筆名|著)[：:\s]+([^\n\s,，\uff0c]+)/);
-            if (authorMatch) {
-                document.getElementById('formAuthor').value = authorMatch[1].trim();
-            } else {
-                for (let l of lines) {
-                    if (l.length >= 2 && l.length <= 6 && !l.includes('，') && !l.includes('。') && l !== document.getElementById('formTitle').value) {
-                        document.getElementById('formAuthor').value = l;
-                        break;
-                    }
+            // 4. 智慧抓取「作者」：在未過濾或已過濾行中尋找短名字（通常重複出現或在書名下方）
+            // 從原始行中尋找短於 6 個字且不包含標點符號的獨立行
+            let author = '';
+            for (let l of lines) {
+                if (l.length >= 2 && l.length <= 5 && !l.includes('，') && !l.includes('。') && !l.includes('【') && l !== title) {
+                    author = l;
+                    break;
                 }
             }
+            if (author) {
+                document.getElementById('formAuthor').value = author.trim();
+            }
 
-            // 4. 自動勾選符合的題材
+            // 5. 自動勾選符合的題材分類
             document.querySelectorAll('input[name="formGenre"]').forEach(cb => {
-                if (rawText.includes(cb.value)) {
+                if (cleanText.includes(cb.value)) {
                     cb.checked = true;
                 }
             });
 
-            // 5. 自動填入摘要記憶點
-            document.getElementById('formSummary').value = rawText.slice(0, 120) + (rawText.length > 120 ? '...' : '');
+            // 6. 智慧抓取「簡介/記憶點」：尋找包含【】或篇幅較長的段落
+            let summary = '';
+            let summaryIndex = lines.findIndex(l => l.startsWith('【') || l.includes('暗戀') || l.includes('阮昭顏'));
+            if (summaryIndex !== -1) {
+                // 把從簡介開始到後面幾行串接起來作為核心記憶點
+                summary = lines.slice(summaryIndex, summaryIndex + 4).join(' ');
+            } else {
+                // 如果找不到，就抓取其他比較長的段落
+                let longLines = lines.filter(l => l.length > 10 && l !== title && l !== author);
+                summary = longLines.length > 0 ? longLines[0] : cleanText.slice(0, 100);
+            }
+            document.getElementById('formSummary').value = summary.slice(0, 150) + (summary.length > 150 ? '...' : '');
 
-            alert('✨ 智慧解析完成！已自動將簡體轉為繁體並填入欄位。');
+            alert('✨ 智慧解析完成！已自動將無標籤文字拆解並轉為繁體。');
         }
         function saveNovel(e) {
             e.preventDefault();
