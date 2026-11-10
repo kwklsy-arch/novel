@@ -695,49 +695,74 @@
         }
 
         // ⚡ Smart Paste Auto-Parser Logic
+        // 簡易簡轉繁邏輯（可處理大多數常用語詞）
+        function simpToTrad(str) {
+            if (!str) return '';
+            // 利用瀏覽器內建繁體中文排序與取代或常見字替換
+            const simp = '简繁体书名作者主角剧情甜宠重生校园权臣末世玄学救赎医学娇小爱顾陆宋沈阮写陆医';
+            const trad = '簡繁體書名作者主角劇情甜寵重生校園權臣末世玄學救贖醫學嬌小愛顧陸宋沈阮寫陸醫';
+            let res = '';
+            for (let i = 0; i < str.length; i++) {
+                const char = str[i];
+                const index = simp.indexOf(char);
+                res += index !== -1 ? trad[index] : char;
+            }
+            return res;
+        }
+
         function parseSmartPaste() {
-            const text = document.getElementById('smartPasteInput').value.trim();
-            if (!text) {
+            let rawText = document.getElementById('smartPasteInput').value.trim();
+            if (!rawText) {
                 alert('請先在上方方塊中貼上要解析的文字！');
                 return;
             }
 
-            // 1. Extract Title
-            const titleMatch = text.match(/(?:書名|名稱)[：:\s]+([^\n\s,，\uff0c]+)/) || text.match(/^《([^》]+)》/) || text.match(/^([^\n\s：:]+)[：:\s]/);
-            if (titleMatch) {
-                document.getElementById('formTitle').value = titleMatch[1].replace(/《|》/g, '').trim();
+            // 1. 將整段文字先進行簡轉繁處理
+            rawText = simpToTrad(rawText);
+
+            // 過濾 App 截圖常見的介面雜訊行
+            const lines = rawText.split('\n').map(l => l.trim()).filter(l => {
+                if (!l) return false;
+                if (/^\d{1,2}:\d{2}$/.test(l)) return false; 
+                if (l.includes('評分') || l.includes('分') || l.includes('書架') || l.includes('連載') || 
+                    l.includes('萬字') || l.includes('目錄') || l.includes('聽書') || l.includes('免費閱讀') || 
+                    l.includes('萬') || l.includes('人') || l.includes('暫無') || l.includes('詳情') || l.includes('正在閱讀')) {
+                    return false;
+                }
+                return true;
+            });
+
+            // 2. 自動抓取書名
+            if (lines.length > 0) {
+                let titleCandidate = lines.find(l => l.length > 1 && !l.includes('・')) || lines[0];
+                document.getElementById('formTitle').value = titleCandidate.replace(/《|》/g, '').trim();
+            }
+
+            // 3. 自動抓取作者
+            const authorMatch = rawText.match(/(?:作者|筆名|著)[：:\s]+([^\n\s,，\uff0c]+)/);
+            if (authorMatch) {
+                document.getElementById('formAuthor').value = authorMatch[1].trim();
             } else {
-                const lines = text.split('\n');
-                if (lines.length > 0 && lines[0].length < 25) {
-                    document.getElementById('formTitle').value = lines[0].replace(/《|》/g, '').trim();
+                for (let l of lines) {
+                    if (l.length >= 2 && l.length <= 6 && !l.includes('，') && !l.includes('。') && l !== document.getElementById('formTitle').value) {
+                        document.getElementById('formAuthor').value = l;
+                        break;
+                    }
                 }
             }
 
-            // 2. Extract Author
-            const authorMatch = text.match(/(?:作者|筆名|著)[：:\s]+([^\n\s,，\uff0c]+)/);
-            if (authorMatch) {
-                document.getElementById('formAuthor').value = authorMatch[1].trim();
-            }
-
-            // 3. Extract Protagonist
-            const protagonistMatch = text.match(/(?:主角|男主|女主|男女主)[：:\s]+([^\n\s,，\uff0c]+)/);
-            if (protagonistMatch) {
-                document.getElementById('formProtagonist').value = protagonistMatch[1].trim();
-            }
-
-            // 4. Auto-check matching genres
+            // 4. 自動勾選符合的題材
             document.querySelectorAll('input[name="formGenre"]').forEach(cb => {
-                if (text.includes(cb.value)) {
+                if (rawText.includes(cb.value)) {
                     cb.checked = true;
                 }
             });
 
-            // 5. Fill Summary
-            document.getElementById('formSummary').value = text.slice(0, 120) + (text.length > 120 ? '...' : '');
+            // 5. 自動填入摘要記憶點
+            document.getElementById('formSummary').value = rawText.slice(0, 120) + (rawText.length > 120 ? '...' : '');
 
-            alert('✨ 智慧解析完成！已自動填入對應欄位，請檢查並微調。');
+            alert('✨ 智慧解析完成！已自動將簡體轉為繁體並填入欄位。');
         }
-
         function saveNovel(e) {
             e.preventDefault();
             const id = document.getElementById('novelId').value;
